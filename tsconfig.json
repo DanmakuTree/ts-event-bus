@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "ES2015",
         "module": "commonjs",
         "lib": [
             "dom",
@@ -8,5 +8,9 @@
         ],
         // "strict": true,
         "typeRoots": ["node_modules/@types"],
+        "outDir": "build"
     },
+    "files": [
+        "src/index.ts"
+    ], 
 }
