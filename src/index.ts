@@ -3,13 +3,13 @@ interface Info{
   execution: number; 
 }
 export class EventBus {
-    #listeners: Object
+    #listeners: object
 
     constructor(){
       this.#listeners = {};
     };
 
-    // private _get_listners: ()=>Object = function(){
+    // private _get_listners: ()=>object = function(){
     //   return this.#listeners
     // }
     private _setListeners: (e:string,callback:Function,number:any)=>void = function(event:string,callback:Function,number:any) {
@@ -31,7 +31,7 @@ export class EventBus {
 
         var that = this;
   
-        (event as Array<string>).forEach(function(e: String) {
+        (event as Array<string>).forEach(function(e: string) {
           if (e.constructor.name !== 'String') {
             throw new Error(
               'Only `String` and array of `String` are accepted for the event names!'
@@ -43,12 +43,12 @@ export class EventBus {
     };
 
     // valiodate that the number is a vild number for the number of executions
-    private _validateNumber: (n: Number | String)=> any = function (n) {
+    private _validateNumber: (n: number | string)=> any = function (n) {
     var type = n.constructor.name;
 
     if (type === 'Number') {
         return n;
-    } else if (type === 'String' && (n as String).toLowerCase() === 'any') {
+    } else if (type === 'String' && (n as string).toLowerCase() === 'any') {
         return 'any';
     }
 
