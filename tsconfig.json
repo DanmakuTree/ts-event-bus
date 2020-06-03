@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "lib": [
+            "dom",
+            "esnext",
+        ],
+        // "strict": true,
+        "typeRoots": ["node_modules/@types"],
+    },
+}
