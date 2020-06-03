@@ -1,0 +1,23 @@
+{
+  "name": "ts-event-bus",
+  "version": "1.0.0",
+  "description": "A Typescript Re-Implementation of [bcerati/js-event-bus](https://github.com/bcerati/js-event-bus) ",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanmakuTree/ts-event-bus.git"
+  },
+  "author": "ax4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DanmakuTree/ts-event-bus/issues"
+  },
+  "homepage": "https://github.com/DanmakuTree/ts-event-bus#readme",
+  "dependencies": {
+    "@types/node": "^14.0.9",
+    "install": "^0.13.0"
+  }
+}
