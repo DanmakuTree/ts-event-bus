@@ -149,9 +149,9 @@ export class EventBus {
     /**
      * Emit the event
      * @param {string} eventName - name of the event.
-     * @param {string} [context] - add a context
+     * @param {string} [context] - add a context ~~deleted~~
      */
-    public emit (eventName: string, context?: string | EventBus) {
+    public emit (eventName: string) {
       var listeners = [];
       let name:string; 
       for (name in this.#listeners) {
@@ -176,18 +176,18 @@ export class EventBus {
       var parentArgs = arguments;
       var that = this; 
 
-      context = context || this;
+      // context = context || this;
       listeners.forEach(function(info, index) {
         var callback = info.callback;
         var number = info.number;
 
-        if (context) {
-          callback = callback.bind(context);
-        }
+        // if (context) {
+          // callback = callback.bind(context);
+        // }
 
         var args = [];
         Object.keys(parentArgs).map(function(value,i,array) {
-          if (i > 1) {
+          if (i > 0) {
             args.push(parentArgs[i]);
           }
         });
