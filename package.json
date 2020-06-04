@@ -15,9 +15,5 @@
   "bugs": {
     "url": "https://github.com/DanmakuTree/ts-event-bus/issues"
   },
-  "homepage": "https://github.com/DanmakuTree/ts-event-bus#readme",
-  "dependencies": {
-    "@types/node": "^14.0.9",
-    "install": "^0.13.0"
-  }
+  "homepage": "https://github.com/DanmakuTree/ts-event-bus#readme"
 }

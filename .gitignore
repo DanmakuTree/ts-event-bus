@@ -4,3 +4,4 @@ js-event-bus
 js-event-bus/**
 package-lock.json
 src/draft/**
+build-test
