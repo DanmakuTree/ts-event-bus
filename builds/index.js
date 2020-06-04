@@ -145,9 +145,51 @@ class EventBus {
     /**
      * Emit the event
      * @param {string} eventName - name of the event.
-     * @param {string} [context] - add a context
+     * @param {string} [context] - add a context ~~deleted~~
      */
-    emit(eventName, context) {
+    emit(eventName) {
+        var listeners = [];
+        let name;
+        for (name in __classPrivateFieldGet(this, _listeners)) {
+            if (__classPrivateFieldGet(this, _listeners).hasOwnProperty(name)) {
+                if (name === eventName) {
+                    //TODO: this lib should definitely use > ES5
+                    Array.prototype.push.apply(listeners, __classPrivateFieldGet(this, _listeners)[name]);
+                }
+                if (name.indexOf('*') >= 0) {
+                    var newName = name.replace(/\*\*/, '([^.]+.?)+');
+                    newName = newName.replace(/\*/g, '[^.]+');
+                    var match = eventName.match(newName);
+                    if (match && eventName === match[0]) {
+                        Array.prototype.push.apply(listeners, __classPrivateFieldGet(this, _listeners)[name]);
+                    }
+                }
+            }
+        }
+        var parentArgs = arguments;
+        var that = this;
+        // context = context || this;
+        listeners.forEach(function (info, index) {
+            var callback = info.callback;
+            var number = info.number;
+            // if (context) {
+            // callback = callback.bind(context);
+            // }
+            var args = [];
+            Object.keys(parentArgs).map(function (value, i, array) {
+                if (i > 0) {
+                    args.push(parentArgs[i]);
+                }
+            });
+            // this event cannot be fired again, remove from the stack
+            if (that._toBeRemoved(info)) {
+                __classPrivateFieldGet(that, _listeners)[eventName].splice(index, 1);
+            }
+            callback.apply(null, args);
+        });
+    }
+    ;
+    emitContext(eventName, context) {
         var listeners = [];
         let name;
         for (name in __classPrivateFieldGet(this, _listeners)) {
