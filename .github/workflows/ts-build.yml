@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 12
       - name: install typescript with npm
-        run: npm install typescript
+        run: npm install typescript --save-dev
       - name: tsc --build --incremental true
         uses: icrawl/action-tsc@v1
         with:
