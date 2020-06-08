@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/DanmakuTree/ts-event-bus/issues"
   },
-  "homepage": "https://github.com/DanmakuTree/ts-event-bus#readme"
+  "homepage": "https://github.com/DanmakuTree/ts-event-bus#readme",
+  "dependencies": {
+    "typescript": "^3.9.5"
+  }
 }

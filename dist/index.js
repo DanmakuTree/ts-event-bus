@@ -143,52 +143,23 @@ class EventBus {
     }
     ;
     /**
-     * Emit the event
+     * Emit the event, directly without involving context
      * @param {string} eventName - name of the event.
-     * @param {string} [context] - add a context ~~deleted~~
+     * @param {...any} Data - additional data.
      */
     emit(eventName) {
-        var listeners = [];
-        let name;
-        for (name in __classPrivateFieldGet(this, _listeners)) {
-            if (__classPrivateFieldGet(this, _listeners).hasOwnProperty(name)) {
-                if (name === eventName) {
-                    //TODO: this lib should definitely use > ES5
-                    Array.prototype.push.apply(listeners, __classPrivateFieldGet(this, _listeners)[name]);
-                }
-                if (name.indexOf('*') >= 0) {
-                    var newName = name.replace(/\*\*/, '([^.]+.?)+');
-                    newName = newName.replace(/\*/g, '[^.]+');
-                    var match = eventName.match(newName);
-                    if (match && eventName === match[0]) {
-                        Array.prototype.push.apply(listeners, __classPrivateFieldGet(this, _listeners)[name]);
-                    }
-                }
-            }
-        }
-        var parentArgs = arguments;
-        var that = this;
-        // context = context || this;
-        listeners.forEach(function (info, index) {
-            var callback = info.callback;
-            var number = info.number;
-            // if (context) {
-            // callback = callback.bind(context);
-            // }
-            var args = [];
-            Object.keys(parentArgs).map(function (value, i, array) {
-                if (i > 0) {
-                    args.push(parentArgs[i]);
-                }
-            });
-            // this event cannot be fired again, remove from the stack
-            if (that._toBeRemoved(info)) {
-                __classPrivateFieldGet(that, _listeners)[eventName].splice(index, 1);
-            }
-            callback.apply(null, args);
-        });
+        var args = Array.from(arguments);
+        // insert the context variable as null, and avoid warning the expected number of parmeters
+        args.splice(1, 0, null);
+        this.emitContext(eventName, ...args.slice(1));
     }
     ;
+    /**
+     * Emit the event with context
+     * @param {string} eventName - name of the event.
+     * @param {string} context - add a context.
+     * @param {...any} Data - additional data.
+     */
     emitContext(eventName, context) {
         var listeners = [];
         let name;
