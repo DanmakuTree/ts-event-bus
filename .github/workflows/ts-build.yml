@@ -21,7 +21,7 @@ jobs:
       - name: tsc --build --incremental true
         uses: icrawl/action-tsc@v1
         with:
-          build: true
+          build: tsconfig.json
       - name: Commit files
         run: |
           git config --local user.email "action@github.com"
