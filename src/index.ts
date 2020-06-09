@@ -224,10 +224,11 @@ export class EventBus {
 
         // for isRaw=true operation, add data: args.slice(0) to avoid [circular]
         if (!isRaw) {
-          args.splice(0,0,eventName)
+          // args.splice(0,0,eventName);
+          // if call not Raw do nothing.
         }
         else{
-          args.splice(0,0,{name: eventName, data: args.slice(0), info: info});
+          args.splice(0,0,{name: eventName, data: args.slice(0)});
         }
 
         callback.apply(null, args);
