@@ -82,7 +82,7 @@
         "affectsGlobalScope": true
       },
       "../src/index.ts": {
-        "version": "1731b212f49eec27fea039ea8f5456c8b41e9b24722db2cafcb86e1e4dd70455",
+        "version": "c65054d647dbabf34609671ed06806350aa6c63cf6e4adab7926251f28cf0240",
         "signature": "908f8d97f6cf1b9f4f1044b255645e35efa97bc718f7b80a32b1904203a6f1bf",
         "affectsGlobalScope": false
       }
