@@ -21,14 +21,15 @@ class EventBus {
         // private _get_listners: ()=>object = function(){
         //   return this.#listeners
         // }
-        this._setListeners = function (event, callback, number) {
+        this._setListeners = function (event, callback, number, isRaw) {
             __classPrivateFieldGet(this, _listeners)[event] = __classPrivateFieldGet(this, _listeners)[event] || [];
             __classPrivateFieldGet(this, _listeners)[event].push({
                 callback: callback,
                 number: number,
+                isRaw: isRaw
             });
         };
-        this._registerListener = function (event, callback, number) {
+        this._registerListener = function (event, callback, number, isRaw) {
             var type = event.constructor.name;
             number = this._validateNumber(number || 'any');
             if (type !== 'Array') {
@@ -39,7 +40,7 @@ class EventBus {
                 if (e.constructor.name !== 'String') {
                     throw new Error('Only `String` and array of `String` are accepted for the event names!');
                 }
-                that._setListeners(e, callback, number);
+                that._setListeners(e, callback, number, isRaw);
             });
         };
         // valiodate that the number is a vild number for the number of executions
@@ -73,7 +74,17 @@ class EventBus {
      */
     on(eventName, callback) {
         // origin: that.registerListener.bind(that)(eventName, callback, 'any');
-        this._registerListener(eventName, callback, 'any');
+        this._registerListener(eventName, callback, 'any', false);
+    }
+    ;
+    /**
+     * Attach a callback to an event, expect the callback to receive raw object
+     * @param {string} eventName - name of the event.
+     * @param {function} callback - callback executed when this event is triggered
+     */
+    onRaw(eventName, callback) {
+        // origin: that.registerListener.bind(that)(eventName, callback, 'any');
+        this._registerListener(eventName, callback, 'any', true);
     }
     ;
     /**
@@ -82,7 +93,7 @@ class EventBus {
      * @param {function} callback - callback executed when this event is triggered
      */
     once(eventName, callback) {
-        this._registerListener(eventName, callback, 1);
+        this._registerListener(eventName, callback, 1, false);
     }
     ;
     /**
@@ -92,7 +103,7 @@ class EventBus {
      * @param {function} callback - callback executed when this event is triggered
      */
     exactly(number, eventName, callback) {
-        this._registerListener(eventName, callback, number);
+        this._registerListener(eventName, callback, number, false);
     }
     ;
     /**
@@ -185,6 +196,7 @@ class EventBus {
         listeners.forEach(function (info, index) {
             var callback = info.callback;
             var number = info.number;
+            var isRaw = info.isRaw;
             if (context) {
                 callback = callback.bind(context);
             }
@@ -197,6 +209,13 @@ class EventBus {
             // this event cannot be fired again, remove from the stack
             if (that._toBeRemoved(info)) {
                 __classPrivateFieldGet(that, _listeners)[eventName].splice(index, 1);
+            }
+            // for isRaw=true operation, add data: args.slice(0) to avoid [circular]
+            if (!isRaw) {
+                args.splice(0, 0, eventName);
+            }
+            else {
+                args.splice(0, 0, { name: eventName, data: args.slice(0), info: info });
             }
             callback.apply(null, args);
         });
