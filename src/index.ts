@@ -12,16 +12,17 @@ export class EventBus {
     // private _get_listners: ()=>object = function(){
     //   return this.#listeners
     // }
-    private _setListeners: (e:string,callback:Function,number:any)=>void = function(event:string,callback:Function,number:any) {
+    private _setListeners: (e:string,callback:Function,number:any,isRaw:boolean)=>void = function(event,callback,number,isRaw) {
       this.#listeners[event] = this.#listeners[event] || [];
       this.#listeners[event].push({
         callback: callback,
         number: number,
+        isRaw: isRaw
       });
-    }
+    };
 
     
-    private _registerListener: (event: Array<string>|string, callback: Function, number: any)=> void = function (event, callback, number) {
+    private _registerListener: (event: Array<string>|string, callback: Function, number: any, isRaw:boolean)=> void = function (event, callback, number, isRaw) {
         var type = event.constructor.name;
         number = this._validateNumber(number || 'any');
   
@@ -38,7 +39,7 @@ export class EventBus {
             );
           }
 
-          that._setListeners(e,callback,number);
+          that._setListeners(e,callback,number,isRaw);
         });
     };
 
@@ -77,7 +78,7 @@ export class EventBus {
      */
     public on(eventName: string, callback: Function) {
         // origin: that.registerListener.bind(that)(eventName, callback, 'any');
-        this._registerListener(eventName,callback,'any'); 
+        this._registerListener(eventName,callback,'any',false); 
     };
 
     /**
@@ -86,7 +87,7 @@ export class EventBus {
      * @param {function} callback - callback executed when this event is triggered
      */
     public once(eventName: string, callback: Function) {
-      this._registerListener(eventName, callback, 1);
+      this._registerListener(eventName, callback, 1, false);
     };
 
     /**
@@ -96,7 +97,7 @@ export class EventBus {
      * @param {function} callback - callback executed when this event is triggered
      */
     public exactly(number: number, eventName: string, callback: Function) {
-      this._registerListener(eventName, callback, number);
+      this._registerListener(eventName, callback, number, false);
     };
 
     /**
@@ -193,6 +194,7 @@ export class EventBus {
       listeners.forEach(function(info, index) {
         var callback = info.callback;
         var number = info.number;
+        var isRaw = info.isRaw;
 
         if (context) {
           callback = callback.bind(context);
@@ -208,6 +210,14 @@ export class EventBus {
         // this event cannot be fired again, remove from the stack
         if (that._toBeRemoved(info)) {
           that.#listeners[eventName].splice(index, 1);
+        }
+
+        // for isRaw=true operation, add data: args.slice(0) to avoid [circular]
+        if (!isRaw) {
+          args.splice(0,0,eventName)
+        }
+        else{
+          args.splice(0,0,{name: eventName, data: args.slice(0), info: info});
         }
 
         callback.apply(null, args);
