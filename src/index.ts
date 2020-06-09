@@ -82,6 +82,16 @@ export class EventBus {
     };
 
     /**
+     * Attach a callback to an event, expect the callback to receive raw object
+     * @param {string} eventName - name of the event.
+     * @param {function} callback - callback executed when this event is triggered
+     */
+    public onRaw(eventName: string, callback: Function) {
+      // origin: that.registerListener.bind(that)(eventName, callback, 'any');
+      this._registerListener(eventName,callback,'any',true); 
+    };
+
+    /**
      * Attach a callback to an event. This callback will not be executed more than once if the event is trigger mutiple times
      * @param {string} eventName - name of the event.
      * @param {function} callback - callback executed when this event is triggered
