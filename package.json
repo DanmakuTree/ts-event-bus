@@ -1,6 +1,6 @@
 {
   "name": "ts-event-bus",
-  "version": "1.0.3",
+  "version": "1.0.2",
   "description": "A Typescript Re-Implementation of [bcerati/js-event-bus](https://github.com/bcerati/js-event-bus) ",
   "main": "dist/index.js",
   "scripts": {
