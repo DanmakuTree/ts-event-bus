@@ -158,7 +158,7 @@ class EventBus {
      * @param {string} eventName - name of the event.
      * @param {...any} Data - additional data.
      */
-    emit(eventName) {
+    emit(eventName, data) {
         var args = Array.from(arguments);
         // insert the context variable as null, and avoid warning the expected number of parmeters
         args.splice(1, 0, null);
@@ -218,7 +218,17 @@ class EventBus {
             else {
                 args.splice(0, 0, { name: eventName, data: args.slice(0) });
             }
-            callback.apply(null, args);
+            try {
+                callback.apply(null, args);
+            }
+            catch (error) {
+                // console.log(error)
+                var errorMsg = { args, error };
+                args.splice(0, 0, { name: eventName, data: args.slice(0) });
+                errorMsg.args = args;
+                errorMsg.error = error;
+                that.emit('catch-error', errorMsg);
+            }
         });
     }
     ;
